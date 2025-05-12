@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ComposePractise</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="question_heading">Question</string>
+    <string name="next">Next</string>
+
+</resources>
