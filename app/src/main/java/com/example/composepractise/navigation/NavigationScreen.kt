@@ -6,9 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.composepractise.mainContent
-import com.example.composepractise.questionexample.mainView
-import com.example.composepractise.showData
 import com.example.composepractise.showingCompleteList
+import com.example.composepractise.weather.searchScreenMainView
 import com.example.composepractise.weather.weatherMainView
 
 enum class ScreenName{
@@ -16,7 +15,8 @@ enum class ScreenName{
     DETAIL,
     SHOWINGLIST,
     QUESTIONSCREEN,
-    WEATHERSCREEN
+    WEATHERSCREEN,
+    SEARCHSCREEN
 }
 
 @Composable
@@ -27,7 +27,7 @@ fun NavigationScreen()
     NavHost(navController, startDestination = ScreenName.WEATHERSCREEN.name) {
 
         composable(route = ScreenName.WEATHERSCREEN.name) {
-            weatherMainView()
+            weatherMainView(navController)
     }
         composable(route = ScreenName.DETAIL.name) {
             mainContent(10,{Log.d("value is","$it")})
@@ -35,6 +35,11 @@ fun NavigationScreen()
 
         composable(route = ScreenName.SHOWINGLIST.name) {
             showingCompleteList()
+        }
+
+        composable(route = ScreenName.SEARCHSCREEN.name)
+        {
+            searchScreenMainView(navController = navController)
         }
 }
     }
