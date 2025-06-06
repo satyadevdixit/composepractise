@@ -13,7 +13,7 @@
         android:theme="@style/Theme.ComposePractise"
         tools:targetApi="31">
         <activity
-            android:name=".DetailActivity"
+            android:name=".listexample.DetailActivity"
             android:exported="true"
             android:label="@string/title_activity_detail"
             android:theme="@style/Theme.ComposePractise">
@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".listexample.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ComposePractise">

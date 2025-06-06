@@ -1,4 +1,4 @@
-package com.example.composepractise
+package com.example.composepractise.listexample
 
 import android.os.Bundle
 import android.widget.Toast
@@ -36,42 +36,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.composepractise.ui.theme.ComposePractiseTheme
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.composepractise.navigation.NavigationScreen
+import com.example.composepractise.R
+import com.example.composepractise.navigationbottombar.bottomNavigationDrawer
+import com.example.composepractise.navigationdrawer.navigationDrawer
 
 class DetailActivity : ComponentActivity() {
-    var context = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        context = LocalContext.current!!
         enableEdgeToEdge()
         setContent {
-            NavigationScreen()
-            /*ComposePractiseTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    var count = remember { mutableStateOf(0) }
-                   *//* Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )*//*
-                    mainContent(count.value){
-            count.value = it
-                    }
-                }
-            }*/
+            navigationDrawer()
+        //bottomNavigationDrawer()
         }
-    }
-}
-
-@Composable
-fun headerLayout()
-{
-   val context1 = LocalContext.current
-        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth().height(150.dp).padding(25.dp).background(Color.Red, shape = RoundedCornerShape(15.dp)).clickable {
-            Toast.makeText(context1,"showing toast",Toast.LENGTH_LONG).show() })  {
-                Text(text = "header data 21", color = Color.Black)
     }
 }
 
@@ -80,10 +57,11 @@ fun headerLayout()
 fun mainContent(countdata: Int,updateValue:(Int)->Unit)
 {
     var textValue by remember { mutableStateOf("data") }
-var count = countdata
-    val context1 = LocalContext.current
+    var count = countdata
+    val context = LocalContext.current
     var checked by remember { mutableStateOf(true) }
-Surface(modifier = Modifier.padding(0.dp,20.dp,0.dp,10.dp),
+
+    Surface(modifier = Modifier.padding(0.dp,20.dp,0.dp,10.dp),
     color = Color.Red) {
     Row (modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -103,7 +81,6 @@ Surface(modifier = Modifier.padding(0.dp,20.dp,0.dp,10.dp),
 
                 }
 
-                //TextField(value = textValue, onValueChange = {textValue = it}, label = {"something"})
             }
         }
 
@@ -114,8 +91,7 @@ Row(modifier = Modifier,
     Button(onClick = {
 count  = count.plus(1)
         updateValue(count)
-        Toast.makeText(context1, textValue + checked, Toast.LENGTH_LONG).show()
-   //     Toast.makeText(context1, "click + = " + count, Toast.LENGTH_LONG).show()
+        Toast.makeText(context, textValue + checked, Toast.LENGTH_LONG).show()
     },
         modifier = Modifier.padding(0.dp,0.dp,5.dp,0.dp),
         colors = ButtonColors(
@@ -133,7 +109,7 @@ count  = count.plus(1)
     Button(onClick = {
         count  = count.minus(1)
         updateValue(count)
-        Toast.makeText(context1, "click = " + count, Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "click = " + count, Toast.LENGTH_LONG).show()
     },
         modifier = Modifier.padding(0.dp,0.dp,5.dp,0.dp),
         colors = ButtonColors(
@@ -153,7 +129,7 @@ count  = count.plus(1)
         checked = checked,
         onCheckedChange = {
             checked = it
-            Toast.makeText(context1, textValue + checked, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, textValue + checked, Toast.LENGTH_LONG).show()
           if (checked)
               updateValue(1)
             else
@@ -164,15 +140,4 @@ count  = count.plus(1)
     }
 }
 
-
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ComposePractiseTheme {
-        //Greeting("Android")
-    //mainContent(0)
-    }
 }

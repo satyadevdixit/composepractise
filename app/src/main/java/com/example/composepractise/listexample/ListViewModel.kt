@@ -1,7 +1,6 @@
-package com.example.composepractise
+package com.example.composepractise.listexample
 
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 

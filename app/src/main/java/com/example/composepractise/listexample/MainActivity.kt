@@ -1,5 +1,6 @@
-package com.example.composepractise
+package com.example.composepractise.listexample
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -24,7 +25,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.ProduceStateScope
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.composepractise.R
 import kotlinx.coroutines.delay
 
 
@@ -53,13 +54,10 @@ fun rowExample(name: String, modifier: Modifier = Modifier) {
             text = "Hi $name!",
         )
         Text(
-            text = "Good bye $name!",
-            //modifier = modifier
-            modifier
+            text = "Good bye $name!", modifier
                 .clip(CircleShape)
                 .background(Color.Red)
                 .clickable {
-                    Log.e("click done", "button")
                 }
         )
     }
@@ -110,7 +108,6 @@ class MainActivity : ComponentActivity() {
                     .background(Color.Red).padding(20.dp)
                     .clickable {
                         Toast.makeText(context, "click on me", Toast.LENGTH_SHORT).show()
-                        Log.e("click done", "button")
                     }
             )
         }
@@ -120,18 +117,9 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun boxExample(name: String, modifier: Modifier = Modifier) {
         Box(modifier.background(Color.Cyan)) { // Text(
-            // text = "Good bye $name!",
-            //modifier = modifier
-            /* modifier
-             .clip(CircleShape)
-             .background(Color.Red)
-             .clickable {
-              }*/
-            //)
             val context = LocalContext.current
             modifier.clickable {
                 Toast.makeText(context, "click on me", Toast.LENGTH_SHORT)
-                Log.e("click on done", "right on me")
             }
 
             Image(
@@ -178,11 +166,10 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun composeLaunchedSideEffects() {
         val dataStateValue = remember { mutableStateOf(0) }
-        Log.d("datastatevalue", dataStateValue.value.toString())
         var counter = rememberUpdatedState(10)
+
         LaunchedEffect(Unit) {
             delay(10000)
-            Log.d("datastatevalue counter", counter.value.toString())
         }
         Column(
             modifier = Modifier.padding(20.dp).fillMaxHeight(),
@@ -214,11 +201,8 @@ class MainActivity : ComponentActivity() {
         Column(
             modifier = Modifier.padding(20.dp).fillMaxHeight(),
             verticalArrangement = Arrangement.Center) {
-            Log.d("disposal", "${counter.value}")
             DisposableEffect(counter.value) {
-                Log.d("disposal_1", "${counter.value}")
                 onDispose {
-                    Log.d("disposal ondispose", "ondispose")
                 }
             }
 
@@ -232,6 +216,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @SuppressLint("ProduceStateDoesNotAssignValue")
     @Composable
     fun produceStateExample()
     {
@@ -241,7 +226,6 @@ class MainActivity : ComponentActivity() {
                  value++
              }
          }
-        Log.d("producestate","${counter.value}")
 
         Button(onClick = { counter.value }) {
             Text(

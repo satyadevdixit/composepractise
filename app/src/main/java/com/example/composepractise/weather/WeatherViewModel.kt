@@ -7,7 +7,6 @@ import com.example.composepractise.R
 
 class WeatherViewModel :ViewModel() {
     var searchDetailMutableLiveData = MutableLiveData<String>()
-  //  var dropDownVisibleLiveData = MutableLiveData<Boolean>()
     val searchDetailLiveData: LiveData<String> get() = searchDetailMutableLiveData
     val weatherList = mutableListOf<WeatherListData>()
 
@@ -23,9 +22,4 @@ class WeatherViewModel :ViewModel() {
         weatherList.add(WeatherListData("thu", R.drawable.cloud_fog_svgrepo_com,"light rain",42,22))
 return weatherList
     }
-
- /*   fun getDropDownVisibility():LiveData<Boolean>
-    {
-        return dropDownVisibleLiveData as LiveData<Boolean>
-    }*/
 }

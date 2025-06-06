@@ -1,6 +1,6 @@
 package com.example.composepractise.questionexample
 
-import android.util.Log
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,35 +38,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.composepractise.R
-import com.example.composepractise.ui.theme.PurpleGrey80
-
-
+import com.example.composepractise.navigationdrawer.createAppBar
+import com.example.composepractise.navigationdrawer.createMenuItems
 
 
 var  questionViewModel: QuestionViewModel? = null
 
 @Composable
-fun mainView(){
+fun mainViewQuestionScreen(drawerState: DrawerState, navController: NavController){
     var selectedOption = remember { mutableStateOf(0) }
     var questionCounter = remember { mutableStateOf(0) }
     questionViewModel = viewModel(QuestionViewModel::class.java)
     questionViewModel?.getQuestionsList()
-        ?.let { showQuestionCounter(it,selectedOption,questionCounter) }
+        ?.let { showQuestionCounter(it,selectedOption,questionCounter,drawerState,navController) }
 }
 
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun showQuestionCounter(
     questionList: MutableList<QuestionDataModel>,
     selectedOption: MutableState<Int>,
-    questionCounter: MutableState<Int>
+    questionCounter: MutableState<Int>,
+    drawerState: DrawerState,
+    navController: NavController
 ){
     val context = LocalContext.current
     val showingQuestionCounter:Int = questionCounter.value
-    Log.d("clickedvalue calling showQuestionCounter = ",questionCounter.value.toString())
-    Surface(modifier = Modifier.padding(10.dp)) {
-        Column(modifier = Modifier.fillMaxWidth()) { Text(
+    Scaffold (modifier = Modifier.padding(10.dp), topBar = {createAppBar("Question",drawerState)}) {
+        Column(modifier = Modifier.fillMaxSize().padding(it)) { Text(
             buildAnnotatedString { withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = Color.Black))
             {
                 if (showingQuestionCounter < questionList.size) {
@@ -98,8 +102,6 @@ if (questionCounter.value<questionList.size) {
     showQuestion(questionList.get(questionCounter.value).question)
     showRadioButton(questionList.get(questionCounter.value).optionsList) {
         selectedOption.value = it
-     //   Log.d("clickedvalue selected = ", selectedOption.value.toString())
-       // Log.d("clickedvalue counter = ", questionCounter.value.toString())
         if (questionList.get(questionCounter.value).optionsList.get(selectedOption.value)==questionList.get(questionCounter.value).answer)
         {
 Toast.makeText(context,"Answer is selected",Toast.LENGTH_SHORT).show()
@@ -130,10 +132,8 @@ fun showRadioButton(list: List<String>, clickEvent:(Int)->Unit)
     Column {  list.forEachIndexed { index, data ->
         Row(modifier = Modifier.fillMaxWidth().height(50.dp),
             verticalAlignment = Alignment.CenterVertically)  {
-            Log.d("radiobutton 1","$index = $data")
-            //    Text(text = index.toString())
             RadioButton(
-                onClick = {Log.d("indexvalue","$index = $data")
+                onClick = {
                           clickEvent(index)},
                 selected = (8==90)
             )
@@ -142,39 +142,6 @@ fun showRadioButton(list: List<String>, clickEvent:(Int)->Unit)
         } } }
 
 }
-
-@Composable
-fun RadioButtonSingleSelection(modifier: Modifier = Modifier) {
-    val radioOptions = listOf("Calls", "Missed", "Friends")
-   // val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[0]) }
-    // Note that Modifier.selectableGroup() is essential to ensure correct accessibility behavior
-    Column(/*modifier.selectableGroup()*/) {
-        radioOptions.forEach { text ->
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                   /* .selectable(
-                        selected = (text == selectedOption),
-                        onClick = { onOptionSelected(text) },
-                        role = Role.RadioButton
-                    )*/
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                RadioButton(
-                    selected = (text == ""),
-                    onClick = null // null recommended for accessibility with screen readers
-                )
-                Text(
-                    text = text,
-                    modifier = Modifier.padding(start = 16.dp)
-                )
-            }
-        }
-    }
-}
-
 
 @Preview
 @Composable

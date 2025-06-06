@@ -1,4 +1,4 @@
-package com.example.composepractise.weather
+package com.example.composepractise.utility.topappbar
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.absolutePadding
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -61,11 +60,11 @@ import com.example.composepractise.navigationdrawer.createAppBar
 import com.example.composepractise.utility.showAlertDialog
 import com.example.composepractise.utility.showBottomSheet
 
-var weatherViewModel: WeatherViewModel? = null
+var weatherViewModel: TopAppBarWeatherViewModel? = null
 
 
 class WeatherListScreen {
-    fun getViewModel(): WeatherViewModel? {
+    fun getViewModel(): TopAppBarWeatherViewModel? {
         return weatherViewModel
     }
 }
@@ -81,9 +80,9 @@ fun observeSearchDetails()
 
 
 @Composable
-fun weatherMainView(navController: NavController,drawerState: DrawerState)
+fun weatherMainViewTopAppBar(navController: NavController, drawerState: DrawerState)
 {
-    weatherViewModel = viewModel(WeatherViewModel::class.java)
+    weatherViewModel = viewModel(TopAppBarWeatherViewModel::class.java)
 topAppBar(navController, drawerState)
 }
 
@@ -95,8 +94,39 @@ fun topAppBar(navController: NavController, drawerState: DrawerState) {
     var dismissAlertDialogState = remember { mutableStateOf(false) }
     var bottomSheetState = remember { mutableStateOf(false) }
 
-    Scaffold(modifier = Modifier.padding(10.dp), topBar = { createAppBar("Weather",drawerState) }) {
-        Column(modifier = Modifier.fillMaxSize().padding(it)) {
+    Scaffold(modifier = Modifier.padding(10.dp)) {
+        Column {
+            Card(elevation = CardDefaults.cardElevation(3.dp)) {
+                TopAppBar(
+                    title = {
+                        Text(text = "Weather Screen Bar")
+                    }, navigationIcon = {
+
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "back",
+                            modifier = Modifier.clickable {
+                                navController.navigate(ScreenName.SEARCHSCREEN.name)
+                            }
+                        )
+                    },
+                    actions = {
+                        IconButton(onClick = { navController.navigate(ScreenName.SEARCHSCREEN.name) }) {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "search"
+                            )
+
+                        }
+
+                        IconButton(onClick = {
+                            dropDownVisible.value = true
+                        }) {
+                            Icon(imageVector = Icons.Default.MoreVert, contentDescription = "dots")
+                        }
+
+                    })
+            }
             showingDropDown(bottomSheetState,dropDownVisible,navController,dismissAlertDialogState)
             showAlertDialog(dismissAlertDialogState,dropDownVisible)
             showBottomSheet(bottomSheetState)
@@ -198,7 +228,7 @@ fun showingSunSetTiming()
 }
 
 @Composable
-fun listItemView(weatherListData: WeatherListData)
+fun listItemView(weatherListData: TopAppBarWeatherListData)
 {
     Surface(modifier = Modifier.padding(10.dp), shape = CircleShape, color = Color.LightGray) {
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth().padding(8.dp)) {
