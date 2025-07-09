@@ -11,10 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -26,6 +30,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
@@ -41,11 +46,13 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.composepractise.coroutine.coroutineEffect
 import com.example.composepractise.listexample.mainContent
 import com.example.composepractise.navigation.ScreenName
 import com.example.composepractise.readingbook.showReadingBookScreen
 import com.example.composepractise.listexample.showingCompleteList
 import com.example.composepractise.questionexample.mainViewQuestionScreen
+import com.example.composepractise.recomposition.recompositionExample
 import com.example.composepractise.utility.topappbar.weatherMainViewTopAppBar
 import com.example.composepractise.weather.searchScreenMainView
 import com.example.composepractise.weather.showingWeatherSearchScreen
@@ -76,7 +83,7 @@ ModalNavigationDrawer(drawerState = drawerState,drawerContent = {
     }
 })
 {
-    NavHost(navController, startDestination = ScreenName.SEARCHSCREEN.name) {
+    NavHost(navController, startDestination = ScreenName.READINGBOOK.name) {
 
         composable(route = ScreenName.SEARCHSCREEN.name)
         {
@@ -109,6 +116,15 @@ ModalNavigationDrawer(drawerState = drawerState,drawerContent = {
             mainViewQuestionScreen(drawerState,navController)
         }
 
+        composable(route = ScreenName.COROUTINE.name) {
+            coroutineEffect(drawerState,navController)
+        }
+
+        composable(route = ScreenName.RECOMPOSITION.name)
+        {
+            recompositionExample()
+        }
+
     }
 }
 }
@@ -120,6 +136,8 @@ val list = mutableListOf<NavigationDrawerItem>()
     list.add(NavigationDrawerItem(Icons.Default.Favorite,"Reading",90))
     list.add(NavigationDrawerItem(Icons.Default.Face,"Weather",80))
     list.add(NavigationDrawerItem(Icons.Default.Build,"Question",70))
+    list.add(NavigationDrawerItem(Icons.Default.Create,"Coroutine",50))
+    list.add(NavigationDrawerItem(Icons.Default.DateRange,"Top App Bar",50))
 
     return list
 }
@@ -131,7 +149,7 @@ fun createAppBar(title: String,drawerState: DrawerState)
 {
     val coroutineScope = rememberCoroutineScope()
 
-    CenterAlignedTopAppBar(
+  /*  CenterAlignedTopAppBar(
         navigationIcon = {
             if (drawerState != null) {
                 IconButton(onClick = {
@@ -144,7 +162,42 @@ fun createAppBar(title: String,drawerState: DrawerState)
             }
         },
         title = { Text(text = title) }
-    )
+    )*/
+
+    TopAppBar(
+        title = {
+            Text(text = title)
+        }, navigationIcon = {
+
+            Icon(
+                imageVector = Icons.Default.Menu,
+                contentDescription = "back",
+                modifier = Modifier.clickable {
+                    //navController.navigate(ScreenName.SEARCHSCREEN.name)
+                    coroutineScope.launch {
+                        drawerState.open()
+                    }
+                }
+            )
+        },
+        actions = {
+            IconButton(onClick = {
+            //    navController.navigate(ScreenName.SEARCHSCREEN.name)
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "search"
+                )
+
+            }
+
+            IconButton(onClick = {
+               // dropDownVisible.value = true
+            }) {
+                Icon(imageVector = Icons.Default.MoreVert, contentDescription = "dots")
+            }
+
+        })
 
 }
 
@@ -191,5 +244,7 @@ fun screenNavigation(index:Int, navController: NavController)
         1-> navController.navigate(ScreenName.READINGBOOK.name)
         2-> navController.navigate(ScreenName.WEATHERSCREEN.name)
         3-> navController.navigate(ScreenName.QUESTIONSCREEN.name)
+        4-> navController.navigate(ScreenName.COROUTINE.name)
+        5-> navController.navigate(ScreenName.WEATHERSCREENTOPAPPBAR.name)
     }
 }

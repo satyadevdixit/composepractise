@@ -12,5 +12,7 @@ enum class ScreenName{
     NAVIGATIONDRAWER,
     REDCOLOR,
     ORANGECOLOR,
-    BLUECOLOR
+    BLUECOLOR,
+    COROUTINE,
+    RECOMPOSITION
 }

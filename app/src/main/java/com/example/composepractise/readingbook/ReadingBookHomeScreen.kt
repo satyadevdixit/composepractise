@@ -51,6 +51,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.composepractise.R
+import com.example.composepractise.navigation.ScreenName
 import com.example.composepractise.navigationdrawer.createAppBar
 import com.example.composepractise.navigationdrawer.navigationDrawerModel
 import com.example.composepractise.utility.showFabButton
@@ -92,7 +93,7 @@ fun showReadingBookScreen(navController: NavController,drawerState: DrawerState)
         Column(modifier = Modifier.padding(it)) {
             LazyRow {
                 items(list) {
-                    showingListViewItem(progressBarIndicatorStatus, progressBarIndicatorTimerStatus)
+                    showingListViewItem(progressBarIndicatorStatus, progressBarIndicatorTimerStatus, navController)
                 }
             }
             showProgressBar(progressBarIndicatorStatus, progressBarIndicator)
@@ -103,7 +104,7 @@ roundButtons()
 }
 
 @Composable
-fun showingListViewItem(progressBarIndicatorStatus:  MutableState<Boolean>,progressBarIndicator: MutableState<Boolean>)
+fun showingListViewItem(progressBarIndicatorStatus:  MutableState<Boolean>,progressBarIndicator: MutableState<Boolean>, navController: NavController)
 {
     Card(elevation = CardDefaults.cardElevation(6.dp), shape = RoundedCornerShape(30.dp), modifier = Modifier.padding(10.dp).clickable { progressBarIndicatorStatus.value = false
     if (progressBarIndicator.value)
@@ -113,6 +114,8 @@ fun showingListViewItem(progressBarIndicatorStatus:  MutableState<Boolean>,progr
     else{
         progressBarIndicator.value = false
     }
+
+        navController.navigate(ScreenName.SEARCHSCREEN.name)
 
     }) {
 Column(modifier = Modifier.padding(10.dp).width(150.dp).height(180.dp)) {

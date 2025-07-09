@@ -47,7 +47,7 @@ class DetailActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             navigationDrawer()
-        //bottomNavigationDrawer()
+       // bottomNavigationDrawer()
         }
     }
 }
